@@ -28,9 +28,9 @@ class Portfolio {
         // return initialPrices ? finalPrices - initialPrices : 0
        
         const differenceInDays = (dueDate.getTime() - initialDate.getTime())/ (1000 * 60 * 60 * 24)
-        const annualizedReturn = (finalPrices/initialPrices) ** (365/differenceInDays) - 1
+        const annualizedReturn = initialPrices ? (finalPrices/initialPrices) ** (365/differenceInDays) - 1 : 0
 
-        return initialPrices ? annualizedReturn : 0
+        return annualizedReturn
     }
 }
 
