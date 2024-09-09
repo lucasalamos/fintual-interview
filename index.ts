@@ -1,10 +1,10 @@
 class Stock {
-    "id": string
-    "prices": Record<string,number>
+    id: string
+    prices: Record<string, number>
 
     public price = (date: Date): number => {
-        const dateFormatted = date.toISOString().split('T')[0]
-        return this.prices[dateFormatted]
+        const formattedDate = date.toISOString().split('T')[0]
+        return this.prices[formattedDate]
     }
 }
 
@@ -15,20 +15,20 @@ class Portfolio {
         this.stocks.push(stock)
     }
 
-    public annualizedReturn = ({initialDate, dueDate }: {initialDate: Date, dueDate: Date}): number => {
-        var initialPrices = 0
-        var finalPrices = 0
+    public profit = ({startDate, endDate }: {startDate: Date, endDate: Date}): number => {
+        let initialTotalValue = 0
+        let finalTotalValue = 0
 
         this.stocks.forEach((stock) => {
-            initialPrices += stock.price(initialDate)
-            finalPrices += stock.price(dueDate)
+            initialTotalValue += stock.price(startDate)
+            finalTotalValue += stock.price(endDate)
         })
 
-        // do not comment next line to return the profit
-        // return initialPrices ? finalPrices - initialPrices : 0
-       
-        const differenceInDays = (dueDate.getTime() - initialDate.getTime())/ (1000 * 60 * 60 * 24)
-        const annualizedReturn = initialPrices ? (finalPrices/initialPrices) ** (365/differenceInDays) - 1 : 0
+        // Uncomment next line to return the profit
+        // return initialTotalValue ? finalTotalValue - initialTotalValue : 0
+
+        const daysBetweenDates = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+        const annualizedReturn = initialTotalValue ? (finalTotalValue / initialTotalValue) ** (365 / daysBetweenDates) - 1 : 0
 
         return annualizedReturn
     }
@@ -56,11 +56,11 @@ stockB.prices = {
 }
 portfolio.addStock(stockB)
 
-const initialDate = new Date("2024-05-01")
-const dueDate = new Date("2024-07-01")
-const annualizedReturn = portfolio.annualizedReturn({
-    initialDate,
-    dueDate
+const startDate = new Date("2024-05-01")
+const endDate = new Date("2024-07-01")
+const annualizedReturn = portfolio.profit({
+    startDate,
+    endDate
 })
 
 console.log(annualizedReturn)
